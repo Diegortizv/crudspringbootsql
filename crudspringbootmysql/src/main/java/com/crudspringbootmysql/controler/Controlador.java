@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.crudspringbootmysql.interfaceService.IPersonaService;
 import com.crudspringbootmysql.modelo.Persona;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -33,6 +35,18 @@ public class Controlador {
     @PostMapping("/save")
     public String save(@Validated Persona p, Model mdodel){
         service.save(p);
+        return "redirect:/listar";
+    }
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable int id, Model model){
+        Optional<Persona>persona=service.listarId(id);
+        model.addAttribute("persona", persona);
+        return "form";
+    }
+    
+    @GetMapping("/eliminar/{id}")
+    public String delete(Model model, @PathVariable int id){
+        service.delete(id);
         return "redirect:/listar";
     }
 }
